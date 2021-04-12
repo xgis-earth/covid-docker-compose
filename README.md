@@ -8,6 +8,12 @@ Check out scripts from Git:
 git clone https://github.com/xgis-earth/covid-docker-compose.git covid && cd covid
 ```
 
+Edit configuration files:
+
+```bash
+cp .env-dist .env # edit any relevant variables you need changed.
+```
+
 Build and start containers:
 
 ```bash

@@ -1,0 +1,76 @@
+version: '3'
+
+services:
+  graphql-engine:
+    image: hasura/graphql-engine:v1.3.3
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: ${HASURA_DATABASE_URL}
+      HASURA_GRAPHQL_ENABLE_CONSOLE: ${HASURA_ENABLE_CONSOLE}
+      HASURA_GRAPHQL_DEV_MODE: ${HASURA_DEV_MODE}
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_ADMIN_SECRET}
+      HASURA_GRAPHQL_JWT_SECRET: ${HASURA_JWT_SECRET}
+    command:
+    - graphql-engine
+    - serve
+    networks:
+      - hasura
+
+  web:
+    image: xgis/covid-web
+    restart: always
+
+  refresh-johns-hopkins-data:
+    image: xgis/covid-refresh-johns-hopkins-data
+    restart: always
+    environment:
+      COVID_DB_HOST: ${COVID_DB_HOST}
+      COVID_DB_NAME: ${COVID_DB_NAME}
+      COVID_DB_USER: ${COVID_DB_USER}
+      COVID_DB_PASS: ${COVID_DB_PASS}
+
+  refresh-owid-data:
+    image: xgis/covid-refresh-owid-data
+    restart: always
+    environment:
+      COVID_DB_HOST: ${COVID_DB_HOST}
+      COVID_DB_NAME: ${COVID_DB_NAME}
+      COVID_DB_USER: ${COVID_DB_USER}
+      COVID_DB_PASS: ${COVID_DB_PASS}
+
+  refresh-test-counts:
+    image: xgis/covid-refresh-test-counts
+    restart: always
+    environment:
+      COVID_DB_HOST: ${COVID_DB_HOST}
+      COVID_DB_NAME: ${COVID_DB_NAME}
+      COVID_DB_USER: ${COVID_DB_USER}
+      COVID_DB_PASS: ${COVID_DB_PASS}
+
+  refresh-population-counts:
+    image: xgis/covid-refresh-population-counts
+    restart: always
+    environment:
+      COVID_DB_HOST: ${COVID_DB_HOST}
+      COVID_DB_NAME: ${COVID_DB_NAME}
+      COVID_DB_USER: ${COVID_DB_USER}
+      COVID_DB_PASS: ${COVID_DB_PASS}
+  
+  query-country-travel-info:
+    image: xgis/covid-refresh-population-counts
+    restart: always
+
+  query-country-news:
+    image: xgis/action-query-country-news
+    restart: always
+    environment:
+      MEDIASTACK_API_KEY: ${MEDIASTACK_API_KEY}
+
+  query-country-airline-info:
+    image: xgis/action-query-country-airline-info
+    restart: always
+
+networks:
+  hasura:
+    driver: bridge
+
