@@ -13,8 +13,6 @@ services:
     command:
     - graphql-engine
     - serve
-    networks:
-      - hasura
 
   web:
     image: xgis/covid-web
@@ -69,8 +67,4 @@ services:
   query-country-airline-info:
     image: xgis/action-query-country-airline-info
     restart: always
-
-networks:
-  hasura:
-    driver: bridge
 
