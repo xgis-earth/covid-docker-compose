@@ -6,20 +6,42 @@ services:
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: ${HASURA_DATABASE_URL}
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_ADMIN_SECRET}
+      HASURA_GRAPHQL_JWT_SECRET: '{"type": "HS256", "key": "${HASURA_JWT_SECRET}", "audience": "hasura", "issuer": "covid"}'
       HASURA_GRAPHQL_ENABLE_CONSOLE: ${HASURA_ENABLE_CONSOLE}
       HASURA_GRAPHQL_DEV_MODE: ${HASURA_DEV_MODE}
-      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_ADMIN_SECRET}
-      HASURA_GRAPHQL_JWT_SECRET: ${HASURA_JWT_SECRET}
+      HASURA_GRAPHQL_PG_CONNECTIONS: '40'
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: 'false'
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: 'public'
     command:
     - graphql-engine
     - serve
 
-  web:
-    image: xgis/covid-web
+  query-country-airline-info:
+    image: xgis/action-query-country-airline-info
+    restart: always
+
+  query-country-news:
+    image: xgis/action-query-country-news
+    restart: always
+    environment:
+      MEDIASTACK_API_KEY: ${MEDIASTACK_API_KEY}
+
+  query-country-travel-info:
+    image: xgis/action-query-country-travel-info
     restart: always
 
   refresh-johns-hopkins-data:
     image: xgis/covid-refresh-johns-hopkins-data
+    restart: always
+    environment:
+      COVID_DB_HOST: ${COVID_DB_HOST}
+      COVID_DB_NAME: ${COVID_DB_NAME}
+      COVID_DB_USER: ${COVID_DB_USER}
+      COVID_DB_PASS: ${COVID_DB_PASS}
+
+  refresh-population-counts:
+    image: xgis/covid-refresh-population-counts
     restart: always
     environment:
       COVID_DB_HOST: ${COVID_DB_HOST}
@@ -45,26 +67,6 @@ services:
       COVID_DB_USER: ${COVID_DB_USER}
       COVID_DB_PASS: ${COVID_DB_PASS}
 
-  refresh-population-counts:
-    image: xgis/covid-refresh-population-counts
+  web:
+    image: xgis/covid-web
     restart: always
-    environment:
-      COVID_DB_HOST: ${COVID_DB_HOST}
-      COVID_DB_NAME: ${COVID_DB_NAME}
-      COVID_DB_USER: ${COVID_DB_USER}
-      COVID_DB_PASS: ${COVID_DB_PASS}
-  
-  query-country-travel-info:
-    image: xgis/covid-refresh-population-counts
-    restart: always
-
-  query-country-news:
-    image: xgis/action-query-country-news
-    restart: always
-    environment:
-      MEDIASTACK_API_KEY: ${MEDIASTACK_API_KEY}
-
-  query-country-airline-info:
-    image: xgis/action-query-country-airline-info
-    restart: always
-
