@@ -17,55 +17,15 @@ services:
     - graphql-engine
     - serve
 
-  query-country-airline-info:
-    image: xgis/action-query-country-airline-info
-    restart: always
-
-  query-country-news:
-    image: xgis/action-query-country-news
+  hasura-extensions:
+    image: xgis/covid-hasura-extensions
     restart: always
     environment:
+      COVID_DB_HOST: ${COVID_DB_HOST}
+      COVID_DB_NAME: ${COVID_DB_NAME}
+      COVID_DB_USER: ${COVID_DB_USER}
+      COVID_DB_PASS: ${COVID_DB_PASS}
       MEDIASTACK_API_KEY: ${MEDIASTACK_API_KEY}
-
-  query-country-travel-info:
-    image: xgis/action-query-country-travel-info
-    restart: always
-
-  refresh-johns-hopkins-data:
-    image: xgis/covid-refresh-johns-hopkins-data
-    restart: always
-    environment:
-      COVID_DB_HOST: ${COVID_DB_HOST}
-      COVID_DB_NAME: ${COVID_DB_NAME}
-      COVID_DB_USER: ${COVID_DB_USER}
-      COVID_DB_PASS: ${COVID_DB_PASS}
-
-  refresh-population-counts:
-    image: xgis/covid-refresh-population-counts
-    restart: always
-    environment:
-      COVID_DB_HOST: ${COVID_DB_HOST}
-      COVID_DB_NAME: ${COVID_DB_NAME}
-      COVID_DB_USER: ${COVID_DB_USER}
-      COVID_DB_PASS: ${COVID_DB_PASS}
-
-  refresh-owid-data:
-    image: xgis/covid-refresh-owid-data
-    restart: always
-    environment:
-      COVID_DB_HOST: ${COVID_DB_HOST}
-      COVID_DB_NAME: ${COVID_DB_NAME}
-      COVID_DB_USER: ${COVID_DB_USER}
-      COVID_DB_PASS: ${COVID_DB_PASS}
-
-  refresh-test-counts:
-    image: xgis/covid-refresh-test-counts
-    restart: always
-    environment:
-      COVID_DB_HOST: ${COVID_DB_HOST}
-      COVID_DB_NAME: ${COVID_DB_NAME}
-      COVID_DB_USER: ${COVID_DB_USER}
-      COVID_DB_PASS: ${COVID_DB_PASS}
 
   web:
     image: xgis/covid-web
